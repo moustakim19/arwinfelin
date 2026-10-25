@@ -998,3 +998,70 @@ button.chip { border: 0; cursor: pointer; }
 .lightbox img { max-width: 100%; max-height: 82dvh; border-radius: 16px; object-fit: contain; }
 .lightbox p { color: #fff; font-weight: 700; }
 .lightbox-close { position: absolute; top: calc(14px + var(--safe-top)); right: 14px; }
+
+/* =====================================================================
+   Étape 4 — Poids et alimentation
+   ===================================================================== */
+.weight-hero { display: flex; align-items: flex-end; justify-content: space-between; gap: 10px; margin-bottom: 10px; }
+.weight-hero > div { display: flex; flex-direction: column; }
+.weight-hero strong { font-family: var(--font-title); font-size: 2.2rem; font-weight: 600; line-height: 1.1; color: var(--text); }
+.weight-hero strong small { font-size: 1rem; color: var(--muted); }
+.trend { display: inline-flex; align-items: center; gap: 4px; padding: 6px 11px; border-radius: 999px; font-weight: 800; font-size: .85rem; background: var(--surface-2); color: var(--muted); }
+.trend.up { background: var(--warning-soft); color: #9A5B06; }
+.trend.down { background: var(--sky-soft); color: #2D73A8; }
+.chart-box { position: relative; height: 220px; }
+.delta { font-weight: 800; font-size: .85rem; color: var(--muted); }
+.delta.up { color: #C07510; }
+.delta.down { color: #2D73A8; }
+.big-dot { width: 56px; height: 56px; border-radius: 18px; }
+.big-dot .icon { width: 28px; height: 28px; }
+
+.ration-card { display: flex; flex-direction: column; gap: 14px; }
+.fake-input { min-height: 50px; display: flex; align-items: center; padding: 12px 14px; border-radius: 15px; background: var(--surface-2); color: var(--muted); font-weight: 700; }
+.range { width: 100%; accent-color: var(--primary); height: 28px; }
+.ration-result {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 12px 18px;
+  padding: 16px;
+  border-radius: var(--radius);
+  background: linear-gradient(135deg, var(--primary-soft), var(--apricot-soft));
+}
+.ration-result > p { flex-basis: 100%; }
+.ration-kcal { display: flex; flex-direction: column; }
+.ration-kcal strong { font-family: var(--font-title); font-size: 2.2rem; font-weight: 600; line-height: 1; color: var(--primary-strong); }
+.ration-kcal span { font-size: .8rem; font-weight: 800; color: var(--muted); }
+.ration-grams { display: flex; gap: 10px; flex-wrap: wrap; }
+.ration-grams div { display: flex; flex-direction: column; padding: 8px 14px; border-radius: 14px; background: var(--surface); }
+.ration-grams b { font-size: 1.15rem; }
+.ration-grams span { font-size: .78rem; color: var(--muted); font-weight: 700; }
+
+.meal-types { display: grid; grid-template-columns: repeat(5, 1fr); gap: 6px; }
+.meal-types label { position: relative; }
+.meal-types input { position: absolute; opacity: 0; }
+.meal-types span {
+  display: flex; flex-direction: column; align-items: center; gap: 2px;
+  padding: 10px 2px; border-radius: 14px; background: var(--surface-2);
+  font-size: .7rem; font-weight: 800; color: var(--muted); cursor: pointer; text-align: center;
+  border: 2px solid transparent; transition: all .2s;
+}
+.meal-types b { font-size: 1.4rem; }
+.meal-types input:checked + span { border-color: var(--primary); background: var(--surface); color: var(--primary-strong); }
+.meal-emoji { font-size: 1.5rem; width: 38px; text-align: center; }
+.day-group { display: flex; flex-direction: column; gap: 8px; }
+.day-group h4 { font-size: .9rem; color: var(--muted); padding-left: 4px; }
+.today-card { display: flex; flex-direction: column; gap: 10px; }
+.today-card h4 { font-size: .95rem; }
+.progress-row { display: grid; grid-template-columns: 28px 1fr auto; align-items: center; gap: 10px; font-size: .85rem; }
+.progress { height: 10px; border-radius: 5px; background: var(--surface-2); overflow: hidden; }
+.progress i { display: block; height: 100%; border-radius: 5px; background: linear-gradient(90deg, var(--mint), #8BD9B9); transition: width .5s var(--ease); }
+.field input.range {
+  -webkit-appearance: auto;
+  appearance: auto;
+  min-height: 0;
+  padding: 0;
+  background: none;
+  border: 0;
+}
+.tabs button { padding: 8px 11px; font-size: .84rem; gap: 5px; }

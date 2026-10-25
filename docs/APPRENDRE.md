@@ -130,3 +130,55 @@ Entre deux repères, on fait une règle de trois (une « interpolation linéaire
   anciennes sont marquées « Renouvelé » (`AF.activeCare`).
 - La date de rappel est proposée automatiquement : +1 an pour un vaccin,
   +3 mois pour un vermifuge, +1 mois pour un antipuces. On peut la changer.
+
+---
+
+## 4. Le poids, la ration et Chart.js
+
+### Comment fonctionne Chart.js ?
+
+Chart.js est une **bibliothèque** : du code écrit par d'autres, qu'on réutilise.
+On la charge depuis un **CDN** (un serveur rapide qui distribue des fichiers
+publics) avec une simple balise dans `index.html` :
+
+```html
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.min.js"></script>
+```
+
+Elle crée alors une fonction globale `Chart`. Pour dessiner une courbe :
+
+1. On place une balise `<canvas>` dans la page : une zone de dessin vide.
+2. On appelle `new Chart(canvas, configuration)`. La configuration a 3 parties :
+   - `type` : `'line'` pour une courbe (il existe aussi `'bar'`, `'pie'`…) ;
+   - `data` : les `labels` (les dates, en bas) et les `datasets` (les séries de
+     valeurs, ici les kilos) avec leur style (couleur, épaisseur, arrondi
+     `tension`, remplissage `fill`) ;
+   - `options` : tout le reste (axes, infobulle, légende, animation).
+3. Chart.js calcule les échelles, dessine les axes, la courbe et les points,
+   et gère tout seul l'infobulle quand on touche un point.
+
+Dans `js/views/weight.js`, la fonction `drawWeightChart` fait tout ça. Le
+dégradé sous la courbe vient de `ctx.createLinearGradient` (une fonction du
+canvas). Quand on quitte l'écran, on appelle `chart.destroy()` pour libérer la
+mémoire.
+
+Le numéro de version (`@4.4.4`) est figé dans l'adresse : une future version
+de Chart.js ne pourra pas casser l'appli par surprise.
+
+### L'alerte de poids
+
+On compare la dernière pesée avec chaque pesée des 31 jours précédents. Si
+l'écart dépasse 10 % (par exemple de 5 kg à 5,6 kg), une alerte s'affiche :
+chez le chat, une variation rapide est un signe à montrer au vétérinaire.
+
+### La ration indicative
+
+1. Besoin au repos : **RER = 70 × poids^0,75** (en kcal par jour).
+2. On le multiplie par un coefficient : 3 pour un chaton de moins de 4 mois,
+   1,2 pour un adulte stérilisé, 1,4 s'il ne l'est pas, 1,1 pour un senior,
+   ±0,2 selon l'activité.
+3. On divise par l'énergie de l'aliment (écrite sur l'emballage, en kcal pour
+   100 g) pour obtenir des grammes.
+
+C'est une estimation : à adapter selon les conseils du vétérinaire et
+l'emballage.
