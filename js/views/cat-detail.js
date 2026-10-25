@@ -79,7 +79,7 @@
           ${infoRow('cake', 'Naissance', cat.birthDate ? AF.formatDate(cat.birthDate) : '')}
           ${infoRow('gender', 'Sexe', sexLabel)}
           ${infoRow('paw', 'Race', cat.breed)}
-          ${cat.breed ? '' : `<a class="info-cta" href="#/race/${encodeURIComponent(cat.id)}">${AF.icon('scan')} Quelle est sa race ? Demandez à l'IA</a>`}
+          ${cat.breed ? (AF.findBreed(cat.breed) ? `<a class="info-cta" href="#/races/${AF.findBreed(cat.breed).id}">${AF.icon('paw')} Tout savoir sur le ${AF.esc(cat.breed)}</a>` : '') : `<a class="info-cta" href="#/race/${encodeURIComponent(cat.id)}">${AF.icon('scan')} Quelle est sa race ? Demandez à l'IA</a>`}
           ${infoRow('palette', 'Robe', cat.color)}
           ${infoRow('chip', 'Puce', cat.chip)}
           ${infoRow('shield', 'Stérilisation', sterLabel)}

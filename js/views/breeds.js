@@ -191,16 +191,18 @@
             <h3>${r.kind === 'breed' ? 'Les 3 races les plus probables' : 'Pistes'}</h3>
             ${list.map((x, i) => `
               <button class="result-bar" data-breed="${x.breed ? x.breed.id : ''}" style="--i:${i}">
-                <span class="rb-rank">${i + 1}</span>
+                ${x.breed ? `<span class="rb-photo"><img src="${x.breed.photo}" alt="" onerror="this.remove()"><b>${i + 1}</b></span>` : `<span class="rb-rank">${i + 1}</span>`}
                 <span class="rb-main"><b>${AF.esc(x.name)}</b><span class="rb-track"><i style="--w:${Math.max(3, x.prob * 100)}%"></i></span></span>
                 <span class="rb-pct">${pct(x.prob)}</span>
               </button>`).join('')}
           </div>`;
 
         const sheet = r.kind === 'breed' ? `
-          <div class="card">
+          <div class="card result-sheet">
+            <img class="result-breed-photo" src="${best.breed.photo}" alt="${AF.esc(best.name)}" onerror="this.remove()">
             <div class="group-head"><span class="tone-dot tone-primary">${AF.icon('paw')}</span><h3>Fiche : ${AF.esc(best.name)}</h3></div>
             ${AF.breedSheetHTML(best.breed)}
+            <a class="btn btn-soft btn-block" href="#/races/${encodeURIComponent(best.breed.id)}">${AF.icon('chevron')} Voir la fiche complète</a>
           </div>` : '';
 
         const suggested = r.kind === 'breed' ? best.name : r.kind === 'domestic' ? best.name : r.kind === 'mixed' ? 'Chat croisé' : '';
@@ -257,10 +259,24 @@
   /* ---------- Page "Toutes les races" ---------- */
 
   function openBreedInfo(b) {
-    AF.sheet({
-      title: b.name,
-      content: `<div class="chips">${hairBadge(b.hair)}<span class="badge badge-muted">${AF.esc(b.origin)}</span></div>${AF.breedSheetHTML(b)}`
-    });
+    AF.go('/races/' + encodeURIComponent(b.id));
+  }
+
+  // Une carte de race avec sa photo
+  function breedCard(b, i) {
+    return `
+      <a class="breed-card" href="#/races/${encodeURIComponent(b.id)}" data-hair="${b.hair}"
+         data-search="${AF.esc(AF.normalizeText(b.name + ' ' + b.en + ' ' + b.origin))}" style="--i:${Math.min(i, 12)}">
+        <span class="breed-card-photo">
+          <img src="${b.photo}" alt="${AF.esc(b.name)}" loading="lazy" decoding="async" onerror="this.remove()">
+          <span class="breed-card-initial">${AF.esc(b.name.charAt(0))}</span>
+          ${hairBadge(b.hair)}
+        </span>
+        <span class="breed-card-body">
+          <strong>${AF.esc(b.name)}</strong>
+          <small>${AF.esc(b.origin)}</small>
+        </span>
+      </a>`;
   }
 
   async function breedsView() {
@@ -268,20 +284,15 @@
     const html = `
       ${AF.topbar({ title: 'Toutes les races', back: true, subtitle: AF.BREEDS.length + ' races reconnues (TICA, CFA, FIFe)' })}
       <div class="page">
-        <label class="search-box">${AF.icon('search')}<input type="search" id="breed-search" placeholder="Rechercher : Persan, Bengal…" autocomplete="off"></label>
+        <label class="search-box">${AF.icon('search')}<input type="search" id="breed-search" placeholder="Rechercher : Persan, Bengal, Japon…" autocomplete="off"></label>
         <div class="filter-chips">
           ${filters.map(([v, l], i) => `<button class="chip ${i === 0 ? 'active' : ''}" data-hair="${v}">${AF.esc(l)}</button>`).join('')}
         </div>
-        <div class="breed-list" id="breed-list">
-          ${AF.BREEDS.map((b) => `
-            <button class="breed-item" data-id="${b.id}" data-hair="${b.hair}" data-search="${AF.esc(AF.normalizeText(b.name + ' ' + b.en + ' ' + b.origin))}">
-              <span class="breed-initial hair-${b.hair}">${AF.esc(b.name.charAt(0))}</span>
-              <span class="todo-text"><strong>${AF.esc(b.name)}</strong><small>${AF.esc(b.origin)} · ${AF.esc(AF.HAIR_TYPES[b.hair])}</small></span>
-              ${AF.icon('chevron', 'muted')}
-            </button>`).join('')}
-        </div>
+        <p class="muted small" id="breed-count">${AF.BREEDS.length} races</p>
+        <div class="breed-grid" id="breed-list">${AF.BREEDS.map(breedCard).join('')}</div>
         <p class="empty-search muted center" hidden>Aucune race ne correspond.</p>
         <a class="btn btn-primary btn-block" href="#/race">${AF.icon('scan')} Reconnaître une race en photo</a>
+        <p class="muted small center">Photos : Wikimédia Commons (licences libres, auteurs cités sur chaque fiche).</p>
       </div>`;
 
     function mount(root) {
@@ -290,25 +301,119 @@
       const apply = () => {
         const q = AF.normalizeText(input.value);
         let visible = 0;
-        root.querySelectorAll('.breed-item').forEach((el) => {
+        root.querySelectorAll('.breed-card').forEach((el) => {
           const show = (hair === 'all' || el.dataset.hair === hair) && (!q || el.dataset.search.includes(q));
           el.hidden = !show;
           if (show) visible++;
         });
         root.querySelector('.empty-search').hidden = visible > 0;
+        root.querySelector('#breed-count').textContent = AF.plural(visible, 'race', 'races');
       };
       input.addEventListener('input', apply);
-      root.querySelectorAll('[data-hair].chip').forEach((chip) => chip.addEventListener('click', () => {
+      root.querySelectorAll('.chip[data-hair]').forEach((chip) => chip.addEventListener('click', () => {
         hair = chip.dataset.hair;
-        root.querySelectorAll('[data-hair].chip').forEach((c) => c.classList.toggle('active', c === chip));
+        root.querySelectorAll('.chip[data-hair]').forEach((c) => c.classList.toggle('active', c === chip));
         apply();
       }));
-      root.querySelectorAll('.breed-item').forEach((el) => el.addEventListener('click', () => openBreedInfo(AF.BREEDS.find((b) => b.id === el.dataset.id))));
     }
     return { html, mount };
+  }
+
+  /* ---------- Fiche complète d'une race ---------- */
+
+  // Une note de 1 à 5, dessinée avec des pattes
+  function ratingRow(label, value, hint) {
+    return `
+      <div class="rating-row">
+        <span class="rating-label"><b>${AF.esc(label)}</b><small>${AF.esc(hint)}</small></span>
+        <span class="rating-paws" aria-label="${value} sur 5">
+          ${[1, 2, 3, 4, 5].map((n) => `<i class="${n <= value ? 'on' : ''}">${AF.icon('paw')}</i>`).join('')}
+        </span>
+      </div>`;
+  }
+
+  const range = (a, b, unit) => AF.formatNumber(a, 1) + ' à ' + AF.formatNumber(b, 1) + ' ' + unit;
+
+  async function breedDetailView(params) {
+    const b = AF.BREEDS.find((x) => x.id === params.id);
+    if (!b) return { html: AF.topbar({ title: 'Race inconnue', back: true }) + `<div class="page">${AF.emptyState({ title: 'Cette race est introuvable' })}</div>` };
+    const credits = await AF.getBreedPhotoCredits();
+    const credit = credits[b.id];
+    const r = b.ratings || {};
+    // Quelques races du même type de poil, pour continuer la visite
+    const index = AF.BREEDS.indexOf(b);
+    const similar = AF.BREEDS.filter((x) => x.hair === b.hair && x.id !== b.id)
+      .sort((x, y) => Math.abs(AF.BREEDS.indexOf(x) - index) - Math.abs(AF.BREEDS.indexOf(y) - index))
+      .slice(0, 8);
+
+    const html = `
+      <section class="cat-hero breed-hero">
+        <div class="cat-hero-photo"><img class="avatar" src="${b.photo}" alt="${AF.esc(b.name)}" onerror="this.remove()"></div>
+        <div class="cat-hero-bar">
+          <button class="btn-icon btn-glass" data-back aria-label="Retour">${AF.icon('back')}</button>
+        </div>
+        <div class="cat-hero-info">
+          <h1>${AF.esc(b.name)}</h1>
+          <p>${AF.esc(b.origin)}</p>
+        </div>
+      </section>
+
+      <div class="page breed-page">
+        <div class="chips">
+          ${hairBadge(b.hair)}
+          ${b.size ? `<span class="badge badge-muted">${AF.esc(b.size)} gabarit</span>` : ''}
+          ${b.en !== b.name ? `<span class="badge badge-muted">En anglais : ${AF.esc(b.en)}</span>` : ''}
+        </div>
+
+        ${b.weight ? `
+          <div class="stat-grid">
+            <div class="stat"><span>Poids adulte</span><strong class="stat-small">${range(b.weight[0], b.weight[1], 'kg')}</strong></div>
+            <div class="stat"><span>Espérance de vie</span><strong class="stat-small">${b.life[0]} à ${b.life[1]} ans</strong></div>
+            <div class="stat"><span>Gabarit</span><strong class="stat-small">${AF.esc(b.size)}</strong></div>
+          </div>` : ''}
+
+        ${AF.breedTags(b).length ? `<div class="chips">${AF.breedTags(b).map((t) => `<span class="chip chip-lavender">${AF.esc(t)}</span>`).join('')}</div>` : ''}
+
+        ${b.history ? `
+          <div class="card">
+            <div class="group-head"><span class="tone-dot tone-apricot">${AF.icon('star')}</span><h3>Son histoire</h3></div>
+            <p class="breed-history">${AF.esc(b.history)}</p>
+          </div>` : ''}
+
+        ${b.ratings ? `
+          <div class="card ratings-card">
+            <div class="group-head"><span class="tone-dot tone-lavender">${AF.icon('paw')}</span><h3>En un coup d'œil</h3></div>
+            ${ratingRow('Énergie', r.energy, r.energy >= 4 ? 'Joueur, a besoin de se dépenser' : r.energy <= 2 ? 'Plutôt calme et posé' : 'Actif sans excès')}
+            ${ratingRow('Affection', r.affection, r.affection >= 5 ? 'Adore les câlins' : r.affection <= 3 ? 'Affectueux mais indépendant' : 'Proche de ses humains')}
+            ${ratingRow('Entretien', r.grooming, r.grooming >= 4 ? 'Soins réguliers indispensables' : r.grooming <= 1 ? 'Très facile' : 'Un peu de brossage')}
+            ${ratingRow('Bavardage', r.vocal, r.vocal >= 4 ? 'Il vous racontera sa journée' : r.vocal <= 1 ? 'Très discret' : 'Miaule de temps en temps')}
+          </div>` : ''}
+
+        <div class="card">
+          <div class="group-head"><span class="tone-dot tone-primary">${AF.icon('file')}</span><h3>La fiche</h3></div>
+          ${AF.breedSheetHTML(b)}
+        </div>
+
+        ${similar.length ? `
+          <div class="section-head"><h2>Dans le même style</h2></div>
+          <div class="similar-strip">${similar.map((s) => `
+            <a class="similar-item" href="#/races/${encodeURIComponent(s.id)}">
+              <img src="${s.photo}" alt="" loading="lazy" onerror="this.remove()">
+              <span>${AF.esc(s.name)}</span>
+            </a>`).join('')}</div>` : ''}
+
+        <a class="btn btn-primary btn-block" href="#/race">${AF.icon('scan')} Mon chat est-il un ${AF.esc(b.name)} ?</a>
+
+        ${credit ? `<p class="photo-credit">Photo : ${AF.esc(credit.artist)}${credit.license ? ' · ' + AF.esc(credit.license) : ''} ·
+          <a href="${AF.esc(credit.source)}" target="_blank" rel="noopener">Wikimédia Commons</a></p>` : ''}
+        <p class="disclaimer">${AF.icon('info')} Valeurs habituelles de la race : chaque chat est unique.</p>
+      </div>`;
+
+    return { html };
   }
 
   AF.route('/race', scanView, 'home');
   AF.route('/race/:catId', scanView, 'home');
   AF.route('/races', breedsView, 'profile');
+  AF.route('/races/:id', breedDetailView, 'profile');
 })(self.AF);

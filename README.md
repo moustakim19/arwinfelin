@@ -25,3 +25,9 @@ utilisées, étape par étape.
 ---
 
 *Cette appli ne remplace pas l'avis d'un vétérinaire.*
+
+## Crédits des photos de races
+
+Les 72 photos de `images/races/` viennent de **Wikimédia Commons**, sous licences
+libres (Creative Commons, domaine public…). L'auteur et la licence de chaque
+photo sont dans `data/races-photos.json` et affichés sur la fiche de la race.

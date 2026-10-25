@@ -10,7 +10,7 @@
    ===================================================================== */
 
 // À changer à chaque nouvelle version pour forcer la mise à jour du cache
-const VERSION = 'arwinfelin-v4';
+const VERSION = 'arwinfelin-v5';
 const APP_CACHE = VERSION + '-app';
 const CDN_CACHE = 'arwinfelin-cdn';
 
@@ -31,6 +31,8 @@ const APP_FILES = [
   'js/notify.js',
   'js/pwa.js',
   'js/races.js',
+  'js/races-details.js',
+  'data/races-photos.json',
   'js/breed-ai.js',
   'data/clip-text-embeddings.json',
   'js/views/home.js',
@@ -64,10 +66,18 @@ importScripts('js/utils.js', 'js/icons.js', 'js/db.js', 'js/health.js', 'js/remi
 self.addEventListener('install', (event) => {
   event.waitUntil(
     caches.open(APP_CACHE)
-      .then((cache) => cache.addAll(APP_FILES))
+      .then((cache) => cache.addAll(APP_FILES).then(() => cacheBreedPhotos(cache)))
       .then(() => self.skipWaiting()) // la nouvelle version prend la main tout de suite
   );
 });
+
+// Les photos des 72 races (environ 4 Mo) : si une photo échoue, on continue quand même
+async function cacheBreedPhotos(cache) {
+  try {
+    const credits = await (await fetch('data/races-photos.json')).json();
+    await Promise.all(Object.keys(credits).map((id) => cache.add('images/races/' + id + '.jpg').catch(() => {})));
+  } catch (e) { /* pas grave : les photos seront gardées quand on les regarde */ }
+}
 
 /* ---------- 2. Activation : on supprime les vieux caches ---------- */
 self.addEventListener('activate', (event) => {

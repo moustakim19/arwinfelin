@@ -1523,3 +1523,66 @@ button, a, label, input, select, textarea { touch-action: manipulation; }
 .ss-line { flex-direction: column; gap: 0; padding: 5px 0; }
 .ss-line span:first-child { font-weight: 800; }
 .ss-line span:last-child { text-align: left; font-size: .85rem; }
+
+/* =====================================================================
+   Races : photos et fiches détaillées
+   ===================================================================== */
+.breed-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; }
+.breed-card {
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  border-radius: var(--radius-lg);
+  background: var(--surface);
+  box-shadow: var(--shadow-sm);
+  animation: pop .45s var(--spring) backwards;
+  animation-delay: calc(var(--i, 0) * 35ms);
+  transition: transform .2s var(--spring);
+}
+.breed-card:active { transform: scale(.97); }
+.breed-card-photo { position: relative; aspect-ratio: 1; overflow: hidden; background: var(--surface-2); }
+.breed-card-photo img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; z-index: 1; }
+.breed-card-initial { position: absolute; inset: 0; display: grid; place-items: center; font-family: var(--font-title); font-size: 2.4rem; color: var(--muted); }
+.breed-card-photo .badge { position: absolute; left: 8px; bottom: 8px; z-index: 2; box-shadow: var(--shadow-sm); }
+.breed-card-body { display: flex; flex-direction: column; padding: 10px 12px 12px; }
+.breed-card-body strong { font-size: .98rem; line-height: 1.25; }
+.breed-card-body small { color: var(--muted); font-size: .78rem; font-weight: 700; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+
+.breed-hero .cat-hero-photo .avatar { object-fit: cover; }
+.breed-page { margin-top: 18px; }
+.stat-small { font-size: 1.05rem !important; line-height: 1.25 !important; margin-top: 2px; }
+.breed-history { font-size: .98rem; line-height: 1.6; }
+
+.ratings-card { display: flex; flex-direction: column; gap: 4px; }
+.rating-row { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 8px 0; border-top: 1px solid var(--line); }
+.ratings-card .group-head + .rating-row { border-top: 0; }
+.rating-label { display: flex; flex-direction: column; }
+.rating-label small { color: var(--muted); font-size: .8rem; }
+.rating-paws { display: flex; gap: 2px; flex-shrink: 0; }
+.rating-paws i { font-style: normal; font-size: 1.05rem; filter: grayscale(1); opacity: .25; }
+.rating-paws i.on { filter: none; opacity: 1; }
+
+.similar-strip { display: flex; gap: 10px; overflow-x: auto; scrollbar-width: none; margin: 0 -18px; padding: 2px 18px 8px; }
+.similar-strip::-webkit-scrollbar { display: none; }
+.similar-item { flex: 0 0 108px; display: flex; flex-direction: column; gap: 6px; font-weight: 800; font-size: .82rem; text-align: center; }
+.similar-item img { width: 108px; height: 108px; border-radius: 20px; object-fit: cover; box-shadow: var(--shadow-sm); background: var(--surface-2); }
+.photo-credit { font-size: .74rem; color: var(--muted); text-align: center; }
+.photo-credit a { text-decoration: underline; }
+
+.rb-photo { position: relative; width: 46px; height: 46px; flex-shrink: 0; border-radius: 14px; overflow: hidden; background: var(--surface-2); }
+.rb-photo img { width: 100%; height: 100%; object-fit: cover; }
+.rb-photo b { position: absolute; right: 2px; bottom: 2px; min-width: 18px; height: 18px; border-radius: 9px; background: rgba(0, 0, 0, .6); color: #fff; font-size: .7rem; line-height: 18px; text-align: center; }
+.result-bar:first-of-type .rb-photo b { background: linear-gradient(135deg, var(--lavender), var(--primary)); }
+.result-sheet { display: flex; flex-direction: column; gap: 10px; }
+.result-breed-photo { width: calc(100% + 36px); margin: -18px -18px 4px; aspect-ratio: 16 / 10; object-fit: cover; }
+
+@media (min-width: 700px) { .breed-grid { grid-template-columns: repeat(3, 1fr); } }
+.result-sheet { overflow: hidden; }
+/* Retouches : étiquette lisible sur les photos, pattes bien visibles, cadrage des photos */
+.breed-card-photo .badge { background: rgba(255, 255, 255, .92); color: #3A2A25; }
+.rating-paws i { display: grid; place-items: center; width: 24px; height: 24px; filter: none; opacity: 1; color: var(--surface-3); }
+.rating-paws i .icon { width: 20px; height: 20px; fill: currentColor; stroke: none; }
+.rating-paws i.on { color: var(--primary); }
+.breed-hero .cat-hero-photo { height: min(80vw, 400px); }
+.breed-hero .cat-hero-photo .avatar { object-position: center 30%; }
+.breed-card-photo img { object-position: center 35%; }
