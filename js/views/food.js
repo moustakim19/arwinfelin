@@ -181,6 +181,7 @@
         const result = el.querySelector('#ration-result');
         const todayBox = el.querySelector('#today-food');
         let saveTimer = null;
+        let pendingSave = null; // enregistrement en attente
 
         // Recalcule la ration à chaque changement
         function update() {
@@ -222,10 +223,12 @@
 
           // On mémorise les réglages dans la fiche du chat (avec un petit délai)
           clearTimeout(saveTimer);
-          saveTimer = setTimeout(async () => {
+          pendingSave = async () => {
+            pendingSave = null;
             const fresh = await AF.db.get('cats', cat.id);
             if (fresh) await AF.db.put('cats', { ...fresh, ration: { kg, activity, dryKcal, wetKcal, dryPercent, kcal: ration.kcal } });
-          }, 600);
+          };
+          saveTimer = setTimeout(pendingSave, 600);
         }
         form.addEventListener('input', update);
         form.addEventListener('submit', (e) => e.preventDefault());
@@ -241,7 +244,8 @@
         });
         const byId = new Map(meals.map((m) => [m.id, m]));
         el.querySelectorAll('[data-id]').forEach((b) => b.addEventListener('click', () => openMealForm(cat, byId.get(b.dataset.id), refresh)));
-        return () => clearTimeout(saveTimer);
+        // En quittant l'écran, on enregistre tout de suite ce qui était en attente
+        return () => { clearTimeout(saveTimer); if (pendingSave) pendingSave(); };
       }
 
       return { html, mount };

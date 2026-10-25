@@ -105,6 +105,7 @@
         <div class="cat-hero-bar">
           <button class="btn-icon btn-glass" data-back aria-label="Retour">${AF.icon('back')}</button>
           <div class="cat-hero-actions" id="hero-actions">
+            <a class="btn-icon btn-glass" href="#/fiche/${encodeURIComponent(cat.id)}" aria-label="Fiche à partager">${AF.icon('share')}</a>
             <a class="btn-icon btn-glass" href="#/race/${encodeURIComponent(cat.id)}" aria-label="Quelle est sa race ?">${AF.icon('scan')}</a>
             <a class="btn-icon btn-glass" href="#${catPath}/modifier" aria-label="Modifier">${AF.icon('edit')}</a>
           </div>

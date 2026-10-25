@@ -1386,3 +1386,140 @@ button.chip { border: 0; cursor: pointer; }
 .pick-list { display: flex; flex-direction: column; margin-top: 10px; }
 .pick-item { display: flex; align-items: center; justify-content: space-between; gap: 10px; padding: 12px 4px; border: 0; border-bottom: 1px solid var(--line); background: none; text-align: left; font-weight: 700; }
 .sheet .search-box { box-shadow: none; }
+
+/* =====================================================================
+   Étape 8 — Mode sombre, réglages, fiche à partager, finitions
+   ===================================================================== */
+
+/* Mode sombre : on change seulement les variables ! Tout le reste suit. */
+[data-theme="dark"] {
+  --bg: #17121A;
+  --bg-2: #1E1822;
+  --surface: #241D29;
+  --surface-2: #2E2533;
+  --surface-3: #3B3141;
+  --text: #F5ECE7;
+  --muted: #B4A3A6;
+  --line: rgba(255, 235, 225, .09);
+  --primary: #FF8A6B;
+  --primary-strong: #FF9C80;
+  --primary-soft: rgba(255, 138, 107, .16);
+  --apricot: #FFB37A;
+  --apricot-soft: rgba(255, 179, 122, .14);
+  --lavender: #B3A5F5;
+  --lavender-soft: rgba(179, 165, 245, .15);
+  --mint: #5ED1A5;
+  --mint-soft: rgba(94, 209, 165, .14);
+  --sky: #7DBDF0;
+  --sky-soft: rgba(125, 189, 240, .14);
+  --danger: #FF6B6F;
+  --danger-soft: rgba(255, 107, 111, .15);
+  --warning: #F5B451;
+  --warning-soft: rgba(245, 180, 81, .15);
+  --shadow: 0 14px 34px -14px rgba(0, 0, 0, .6);
+  --shadow-sm: 0 6px 16px -8px rgba(0, 0, 0, .55);
+  --shadow-lg: 0 24px 60px -20px rgba(0, 0, 0, .7);
+  --glass: rgba(30, 24, 34, .78);
+  color-scheme: dark;
+}
+/* Couleurs de texte "en dur" à adoucir dans le noir */
+[data-theme="dark"] .chip-lavender, [data-theme="dark"] .age-human, [data-theme="dark"] .hair-semi,
+[data-theme="dark"] .memory-banner small, [data-theme="dark"] .info-cta, [data-theme="dark"] .visit-date { color: #CFC5FF; }
+[data-theme="dark"] .chip-apricot, [data-theme="dark"] .hair-short, [data-theme="dark"] .today-bell { color: #FFC896; }
+[data-theme="dark"] .chip-mint, [data-theme="dark"] .age-real, [data-theme="dark"] .badge-ok { color: #8BE3C0; }
+[data-theme="dark"] .chip-sky, [data-theme="dark"] .hair-long, [data-theme="dark"] .trend.down, [data-theme="dark"] .delta.down { color: #A8D4F7; }
+[data-theme="dark"] .badge-warning, [data-theme="dark"] .trend.up, [data-theme="dark"] .alert-warning { color: #FFD08A; }
+[data-theme="dark"] .alert-danger, [data-theme="dark"] .chip-danger { color: #FFB0B2; }
+[data-theme="dark"] .alert-info { color: #A8D4F7; }
+[data-theme="dark"] .alert-ok { color: #8BE3C0; }
+[data-theme="dark"] .toast { background: #F5ECE7; color: #241D29; }
+[data-theme="dark"] .btn-glass { background: rgba(36, 29, 41, .7); color: #F5ECE7; }
+[data-theme="dark"] .cat-card-sex { background: rgba(36, 29, 41, .85); }
+[data-theme="dark"] .hero { box-shadow: 0 22px 44px -24px #F2785C; }
+[data-theme="dark"] .switch::after { background: #F5ECE7; }
+[data-theme="dark"] .rem-check { background: var(--surface-2); }
+[data-theme="dark"] .sheet-backdrop.show { background: rgba(0, 0, 0, .6); }
+
+/* Transition douce quand on change de thème */
+body.theme-anim, body.theme-anim * { transition: background-color .35s, color .35s, border-color .35s !important; }
+
+/* Réglages */
+.settings-group { display: flex; flex-direction: column; gap: 8px; }
+.settings-group > h3 { font-size: .82rem; text-transform: uppercase; letter-spacing: .08em; color: var(--muted); padding-left: 6px; }
+.settings-card { padding: 6px 16px; }
+.setting-row { display: flex; align-items: center; gap: 12px; padding: 12px 0; border-top: 1px solid var(--line); width: 100%; background: none; border-left: 0; border-right: 0; border-bottom: 0; text-align: left; }
+.settings-card > .setting-row:first-child { border-top: 0; }
+.setting-row .todo-text { flex: 1; }
+.setting-row.danger strong { color: var(--danger); }
+.theme-pick { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; padding: 12px 0 14px; }
+.theme-pick label { position: relative; }
+.theme-pick input { position: absolute; opacity: 0; }
+.theme-pick span {
+  display: flex; flex-direction: column; align-items: center; gap: 8px; padding: 12px 6px;
+  border-radius: 16px; border: 2px solid transparent; background: var(--surface-2);
+  font-weight: 800; font-size: .82rem; cursor: pointer;
+}
+.theme-pick i { display: block; width: 100%; height: 46px; border-radius: 10px; box-shadow: inset 0 0 0 1px rgba(0, 0, 0, .08); }
+.theme-pick .t-light { background: linear-gradient(135deg, #FFF6EE 50%, #F2785C 50%); }
+.theme-pick .t-dark { background: linear-gradient(135deg, #17121A 50%, #FF8A6B 50%); }
+.theme-pick .t-auto { background: linear-gradient(135deg, #FFF6EE 0 33%, #17121A 33% 66%, #F2785C 66%); }
+.theme-pick input:checked + span { border-color: var(--primary); background: var(--surface); }
+.storage-bar { height: 10px; border-radius: 5px; background: var(--surface-2); overflow: hidden; margin-top: 6px; }
+.storage-bar i { display: block; height: 100%; background: linear-gradient(90deg, var(--mint), var(--sky)); }
+.profile-card .btn-icon { margin-left: auto; }
+.version-line { text-align: center; font-size: .78rem; color: var(--muted); }
+
+/* Fiche à partager */
+.share-sheet {
+  overflow: hidden;
+  border-radius: var(--radius-xl);
+  background: var(--surface);
+  box-shadow: var(--shadow);
+}
+.ss-head {
+  display: flex; align-items: center; gap: 16px; padding: 22px;
+  color: #fff; background: linear-gradient(135deg, #F2785C, #F79A6B 55%, #FFC183);
+}
+.ss-photo { width: 92px; height: 92px; flex-shrink: 0; border-radius: 50%; overflow: hidden; border: 4px solid rgba(255, 255, 255, .9); background: #fff; }
+.ss-head h2 { font-size: 1.8rem; }
+.ss-head p { opacity: .92; font-weight: 700; font-size: .9rem; }
+.ss-body { padding: 8px 20px 20px; display: flex; flex-direction: column; gap: 4px; }
+.ss-section { padding: 12px 0; border-top: 1px solid var(--line); }
+.ss-section:first-child { border-top: 0; }
+.ss-section h3 { display: flex; align-items: center; gap: 8px; font-size: .95rem; margin-bottom: 8px; color: var(--primary-strong); }
+.ss-section h3 .icon { width: 18px; height: 18px; }
+.ss-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px 14px; }
+.ss-grid div { display: flex; flex-direction: column; }
+.ss-grid small { color: var(--muted); font-size: .75rem; font-weight: 700; text-transform: uppercase; letter-spacing: .04em; }
+.ss-grid b { font-size: .92rem; overflow-wrap: anywhere; }
+.ss-line { display: flex; justify-content: space-between; gap: 10px; padding: 4px 0; font-size: .9rem; }
+.ss-line span:last-child { color: var(--muted); text-align: right; }
+.ss-line.late span:last-child { color: var(--danger); font-weight: 800; }
+.ss-empty { color: var(--muted); font-size: .88rem; }
+.ss-foot { padding: 12px 20px; font-size: .75rem; color: var(--muted); text-align: center; background: var(--surface-2); }
+.share-actions { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.share-actions .btn-block { grid-column: 1 / -1; }
+
+/* Clavier ouvert sur téléphone : on cache la barre du bas pour libérer de la place */
+body.keyboard-open .tabbar { transform: translate(-50%, 140%); }
+.tabbar { transition: transform .25s var(--ease); }
+
+/* Pas de délai au toucher, pas de zoom par double-tap sur les boutons */
+button, a, label, input, select, textarea { touch-action: manipulation; }
+
+/* Impression / PDF : on n'imprime que la fiche */
+@media print {
+  @page { size: A4; margin: 12mm; }
+  :root, [data-theme="dark"] { --surface: #fff; --surface-2: #FFF1E6; --text: #3A2A25; --muted: #8F7B72; --line: rgba(122, 74, 52, .14); --primary-strong: #E1603F; --danger: #E5484D; }
+  body { background: #fff !important; color: #3A2A25; }
+  body * { visibility: hidden; }
+  .share-sheet, .share-sheet * { visibility: visible; }
+  .share-sheet { position: absolute; inset: 0 0 auto 0; box-shadow: none; border: 1px solid #eee; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  .tabbar, .toasts { display: none !important; }
+}
+.ss-grid a { color: var(--primary-strong); font-weight: 700; font-size: .9rem; }
+.form-card-title { display: flex; align-items: center; gap: 8px; font-size: 1rem; color: var(--primary-strong); }
+/* Lignes de la fiche : nom au-dessus, détails en dessous (plus lisible sur téléphone) */
+.ss-line { flex-direction: column; gap: 0; padding: 5px 0; }
+.ss-line span:first-child { font-weight: 800; }
+.ss-line span:last-child { text-align: left; font-size: .85rem; }

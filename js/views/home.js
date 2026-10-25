@@ -32,12 +32,12 @@
   }
 
   async function homeView() {
-    const cats = await AF.getCats();
+    const [cats, ownerName] = await Promise.all([AF.getCats(), AF.db.getSetting('ownerName', '')]);
 
     const header = `
       <header class="home-head">
         <div>
-          <p class="home-hello">${greeting()} 👋</p>
+          <p class="home-hello">${greeting()}${ownerName ? ' ' + AF.esc(ownerName) : ''} 👋</p>
           <h1 class="home-title">Mes chats</h1>
         </div>
         <a class="btn-icon btn-icon-primary" href="#/nouveau" aria-label="Ajouter un chat">${AF.icon('plus')}</a>

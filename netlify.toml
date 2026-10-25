@@ -1,0 +1,14 @@
+# Configuration de Netlify (hébergement gratuit du site)
+[build]
+  publish = "."
+
+# Le service worker ne doit jamais rester en cache : sinon les mises à jour n'arrivent pas
+[[headers]]
+  for = "/sw.js"
+  [headers.values]
+    Cache-Control = "no-cache"
+
+[[headers]]
+  for = "/manifest.json"
+  [headers.values]
+    Content-Type = "application/manifest+json"

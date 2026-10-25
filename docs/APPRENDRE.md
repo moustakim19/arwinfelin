@@ -337,3 +337,31 @@ texte). Pour régénérer le fichier, ouvre la console du navigateur et tape
 Sur 18 photos de races de Wikipédia, la bonne race arrive en tête 11 fois, et
 dans le trio de tête 15 fois. C'est un bon niveau pour une IA gratuite qui n'a
 jamais été entraînée sur nos races, mais ça reste **indicatif**.
+
+---
+
+## 8. Fiche à partager, mode sombre, sauvegarde
+
+- **La fiche PDF** utilise l'impression du navigateur : une règle CSS
+  `@media print` cache tout sauf la fiche. Dans la fenêtre d'impression, on
+  choisit « Enregistrer au format PDF ».
+- **La fiche en image** est redessinée dans un `<canvas>` (dessin
+  pixel par pixel : rectangles, textes, photo ronde), puis transformée en PNG.
+  Le bouton « Partager » ouvre le menu du téléphone (`navigator.share`).
+- **Le mode sombre** ne change que les variables CSS (`--bg`, `--text`…) sous
+  `[data-theme="dark"]`. Un tout petit script dans `<head>` applique le thème
+  avant l'affichage, pour éviter un flash blanc.
+- **La sauvegarde** est un fichier JSON. Les photos (des `Blob`) sont
+  transformées en texte base64 (« data URL »). À l'import, on vérifie et on
+  convertit tout **avant** d'effacer quoi que ce soit : si le fichier est
+  abîmé, aucune donnée n'est perdue.
+
+## 9. Mettre en ligne (GitHub + Netlify)
+
+Le fichier `netlify.toml` dit à Netlify de publier le dossier tel quel et de
+ne jamais garder `sw.js` en cache (sinon les mises à jour arriveraient en
+retard). À chaque modification : change `VERSION` dans `sw.js`, puis
+`git add .`, `git commit -m "…"`, `git push`. Netlify republie tout seul.
+
+Sur le site Netlify (en HTTPS), tout fonctionne sur téléphone : appli
+installable, hors ligne, notifications et IA.

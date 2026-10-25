@@ -29,33 +29,61 @@
     });
   };
 
+  const row = (href, icon, tone, title, sub) => `
+    <a class="todo-row" href="${href}">
+      <span class="tone-dot tone-${tone}">${AF.icon(icon)}</span>
+      <span class="todo-text"><strong>${AF.esc(title)}</strong><small>${AF.esc(sub)}</small></span>
+      ${AF.icon('chevron', 'muted')}
+    </a>`;
+
   async function profileView() {
-    const cats = await AF.getCats();
+    const [cats, ownerName, journal, health, reminders] = await Promise.all([
+      AF.getCats(), AF.db.getSetting('ownerName', ''), AF.db.getAll('journal'), AF.db.getAll('health'), AF.db.getAll('reminders')
+    ]);
+    const notifText = { granted: 'Activées', denied: 'Bloquées dans le navigateur', default: 'Pas encore activées', unsupported: 'Non disponibles ici' }[AF.notify.permission()];
+
     const html = `
       ${AF.topbar({ title: 'Profil' })}
       <div class="page">
         <div class="profile-card">
           <img src="icons/icon-192.png" alt="" width="64" height="64">
           <div>
-            <h2>ArwinFelin</h2>
-            <p class="muted">${AF.plural(cats.length, 'chat', 'chats')} · données gardées sur cet appareil</p>
+            <h2>${ownerName ? AF.esc(ownerName) : 'Mon profil'}</h2>
+            <p class="muted small">${ownerName && cats.length ? 'Humain de ' + AF.esc(cats.map((c) => c.name).join(', ')) : 'Ajoutez votre prénom dans les réglages'}</p>
           </div>
+          <a class="btn-icon" href="#/reglages" aria-label="Réglages">${AF.icon('settings')}</a>
         </div>
+
+        <div class="stat-grid">
+          <div class="stat stat-mint"><strong>${cats.length}</strong><span>${cats.length > 1 ? 'Chats' : 'Chat'}</span></div>
+          <div class="stat stat-lavender"><strong>${journal.length}</strong><span>Souvenirs</span></div>
+          <div class="stat stat-warning"><strong>${health.length + reminders.length}</strong><span>Soins et rappels</span></div>
+        </div>
+
         ${AF.installCardHTML()}
         ${AF.pwa.isInstalled() ? `<div class="alert alert-ok">${AF.icon('check')}<div><strong>Appli installée</strong><p>Elle fonctionne aussi hors ligne.</p></div></div>` : ''}
+
+        ${cats.length ? `
+          <div class="section-head"><h2>Fiches à partager</h2></div>
+          <div class="card list-card">
+            ${cats.map((c) => `
+              <a class="todo-row" href="#/fiche/${encodeURIComponent(c.id)}">
+                <span class="todo-avatar">${AF.catAvatar(c)}</span>
+                <span class="todo-text"><strong>Fiche de ${AF.esc(c.name)}</strong><small>Pour le véto ou un gardien · PDF ou image</small></span>
+                ${AF.icon('share', 'muted')}
+              </a>`).join('')}
+          </div>` : ''}
+
+        <div class="section-head"><h2>Outils</h2></div>
         <div class="card list-card">
-          <a class="todo-row" href="#/race"><span class="tone-dot tone-lavender">${AF.icon('scan')}</span><span class="todo-text"><strong>Reconnaître une race</strong><small>IA gratuite, la photo reste sur l'appareil</small></span>${AF.icon('chevron', 'muted')}</a>
-          <a class="todo-row" href="#/races"><span class="tone-dot tone-mint">${AF.icon('paw')}</span><span class="todo-text"><strong>Toutes les races</strong><small>${AF.BREEDS.length} fiches à consulter</small></span>${AF.icon('chevron', 'muted')}</a>
-          <a class="todo-row" href="#/rappels"><span class="tone-dot tone-apricot">${AF.icon('bell')}</span><span class="todo-text"><strong>Notifications</strong><small>${notifLabel()}</small></span>${AF.icon('chevron', 'muted')}</a>
+          ${row('#/race', 'scan', 'lavender', 'Reconnaître une race', "IA gratuite, la photo reste sur l'appareil")}
+          ${row('#/races', 'paw', 'mint', 'Toutes les races', AF.BREEDS.length + ' fiches à consulter')}
+          ${row('#/rappels', 'bell', 'apricot', 'Notifications', notifText)}
+          ${row('#/reglages', 'settings', 'sky', 'Réglages', 'Thème, sauvegarde, profil')}
         </div>
         ${AF.VET_DISCLAIMER}
       </div>`;
     return { html, mount: (root) => AF.bindInstallCard(root) };
-  }
-
-  function notifLabel() {
-    const p = AF.notify.permission();
-    return { granted: 'Activées', denied: 'Bloquées dans le navigateur', default: 'Pas encore activées', unsupported: 'Non disponibles sur ce navigateur' }[p];
   }
 
   AF.route('/profil', profileView, 'profile');

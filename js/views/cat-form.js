@@ -75,6 +75,17 @@
           </label>
         </div>
 
+        <div class="card form-card">
+          <h3 class="form-card-title">${AF.icon('stethoscope')} Vétérinaire et gardien</h3>
+          <div class="field-row">
+            <label class="field"><span>Vétérinaire</span><input name="vetName" maxlength="60" autocomplete="off" placeholder="Dr Martin" value="${AF.esc(c.vetName)}"></label>
+            <label class="field"><span>Téléphone</span><input name="vetPhone" type="tel" maxlength="20" placeholder="01 23 45 67 89" value="${AF.esc(c.vetPhone)}"></label>
+          </div>
+          <label class="field"><span>Alimentation</span><input name="foodNotes" maxlength="120" placeholder="Ex. croquettes stérilisé, 2 repas par jour" value="${AF.esc(c.foodNotes)}"></label>
+          <label class="field"><span>Habitudes et consignes</span><textarea name="sitterNotes" maxlength="600" placeholder="Ex. se cache sous le lit, adore la plume, ne sort pas…">${AF.esc(c.sitterNotes)}</textarea>
+            <small>Affiché sur la fiche à partager avec un gardien.</small></label>
+        </div>
+
         <div class="form-actions">
           <button type="submit" class="btn btn-primary btn-lg btn-block">${AF.icon('check')} ${isEdit ? 'Enregistrer' : 'Ajouter ce chat'}</button>
           ${isEdit ? `<button type="button" class="btn btn-ghost-danger btn-block" data-delete>${AF.icon('trash')} Supprimer ${AF.esc(c.name)}</button>` : ''}
@@ -110,6 +121,10 @@
           color: data.color,
           chip: data.chip,
           sterilized: data.sterilized,
+          vetName: data.vetName,
+          vetPhone: data.vetPhone,
+          foodNotes: data.foodNotes,
+          sitterNotes: data.sitterNotes,
           photo: photo.getBlob(),
           createdAt: c.createdAt || new Date().toISOString(),
           updatedAt: new Date().toISOString()

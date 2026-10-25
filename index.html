@@ -13,6 +13,14 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600&family=Nunito:wght@400;600;700;800&display=swap">
 
+  <!-- Thème appliqué AVANT l'affichage, pour éviter un flash blanc en mode sombre -->
+  <script>
+    (function () {
+      var mode = localStorage.getItem('af-theme') || 'auto';
+      var dark = mode === 'dark' || (mode === 'auto' && matchMedia('(prefers-color-scheme: dark)').matches);
+      document.documentElement.dataset.theme = dark ? 'dark' : 'light';
+    })();
+  </script>
   <link rel="stylesheet" href="css/style.css">
 
   <!-- Appli installable (PWA) -->
@@ -51,6 +59,7 @@
   <script src="js/icons.js"></script>
   <script src="js/db.js"></script>
   <script src="js/ui.js"></script>
+  <script src="js/settings.js"></script>
   <script src="js/app.js"></script>
   <script src="js/views/home.js"></script>
   <script src="js/views/cat-form.js"></script>
@@ -68,5 +77,7 @@
   <script src="js/views/reminders.js"></script>
   <script src="js/views/profile.js"></script>
   <script src="js/views/breeds.js"></script>
+  <script src="js/views/settings.js"></script>
+  <script src="js/views/share.js"></script>
 </body>
 </html>
