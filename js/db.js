@@ -26,7 +26,7 @@
 
   // Le numéro de version : à augmenter à chaque fois qu'on ajoute un magasin
   // ou un index. Le navigateur lance alors "onupgradeneeded" pour mettre à jour.
-  const DB_VERSION = 5; // v2 : santé · v3 : poids et repas · v4 : journal · v5 : rappels
+  const DB_VERSION = 6; // v2 : santé · v3 : poids, repas · v4 : journal · v5 : rappels · v6 : cache IA
 
   // Description de tous les magasins : nom -> liste des index
   const SCHEMA = {
@@ -36,7 +36,8 @@
     meals: ['catId'],       // historique des repas
     journal: ['catId'],     // souvenirs (photo, humeur, note)
     reminders: ['catId'],   // rappels uniques ou répétés
-    settings: []
+    settings: [],
+    cache: []               // calculs gardés (empreintes de l'IA)
   };
 
   // Les magasins qui contiennent des données liées à un chat (champ "catId").

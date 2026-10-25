@@ -103,6 +103,12 @@
         ${memoryBlock}
         ${AF.installCardHTML(true)}
 
+        <a class="ai-card" href="#/race">
+          <span class="ai-card-icon">${AF.icon('scan')}</span>
+          <span><strong>Quelle est sa race ?</strong><small>Une photo suffit. IA gratuite, dans le téléphone.</small></span>
+          ${AF.icon('sparkles', 'ai-sparkle')}
+        </a>
+
         <div class="section-head"><h2>Mes compagnons</h2></div>
         <div class="cat-grid">
           ${cats.map(catCard).join('')}

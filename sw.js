@@ -10,7 +10,7 @@
    ===================================================================== */
 
 // À changer à chaque nouvelle version pour forcer la mise à jour du cache
-const VERSION = 'arwinfelin-v1';
+const VERSION = 'arwinfelin-v2';
 const APP_CACHE = VERSION + '-app';
 const CDN_CACHE = 'arwinfelin-cdn';
 
@@ -29,6 +29,9 @@ const APP_FILES = [
   'js/reminders-core.js',
   'js/notify.js',
   'js/pwa.js',
+  'js/races.js',
+  'js/breed-ai.js',
+  'data/clip-text-embeddings.json',
   'js/views/home.js',
   'js/views/cat-form.js',
   'js/views/cat-detail.js',
@@ -38,6 +41,7 @@ const APP_FILES = [
   'js/views/journal.js',
   'js/views/reminders.js',
   'js/views/profile.js',
+  'js/views/breeds.js',
   'icons/icon.svg',
   'icons/icon-192.png',
   'icons/icon-512.png',

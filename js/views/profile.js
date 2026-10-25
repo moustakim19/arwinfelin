@@ -44,6 +44,8 @@
         ${AF.installCardHTML()}
         ${AF.pwa.isInstalled() ? `<div class="alert alert-ok">${AF.icon('check')}<div><strong>Appli installée</strong><p>Elle fonctionne aussi hors ligne.</p></div></div>` : ''}
         <div class="card list-card">
+          <a class="todo-row" href="#/race"><span class="tone-dot tone-lavender">${AF.icon('scan')}</span><span class="todo-text"><strong>Reconnaître une race</strong><small>IA gratuite, la photo reste sur l'appareil</small></span>${AF.icon('chevron', 'muted')}</a>
+          <a class="todo-row" href="#/races"><span class="tone-dot tone-mint">${AF.icon('paw')}</span><span class="todo-text"><strong>Toutes les races</strong><small>${AF.BREEDS.length} fiches à consulter</small></span>${AF.icon('chevron', 'muted')}</a>
           <a class="todo-row" href="#/rappels"><span class="tone-dot tone-apricot">${AF.icon('bell')}</span><span class="todo-text"><strong>Notifications</strong><small>${notifLabel()}</small></span>${AF.icon('chevron', 'muted')}</a>
         </div>
         ${AF.VET_DISCLAIMER}

@@ -259,3 +259,81 @@ un serveur envoie le message au bon moment (c'est ainsi que fonctionnent
 WhatsApp ou Gmail). Il faudrait un serveur, des clés et un compte, ce qu'on a
 volontairement évité. Pour un rappel vraiment important (vaccin, médicament),
 le plus sûr reste d'ajouter aussi une alarme dans l'agenda du téléphone.
+
+---
+
+## 7. La reconnaissance de race (IA gratuite, dans le téléphone)
+
+### Comment CLIP compare une image avec des mots
+
+CLIP est un modèle d'IA créé par OpenAI et entraîné sur 400 millions de
+couples « image + légende » trouvés sur internet. Il a deux moitiés :
+
+- un **encodeur d'images**, qui transforme une photo en une liste de
+  512 nombres ;
+- un **encodeur de texte**, qui transforme une phrase en une liste de
+  512 nombres aussi.
+
+Ces listes s'appellent des **empreintes** (*embeddings*). L'entraînement les a
+réglées pour qu'une photo et sa bonne légende aient des empreintes **proches**.
+Imagine un immense plan où chaque photo et chaque phrase sont un point :
+la photo d'un Persan atterrit tout près de la phrase « a photo of a Persian
+cat », et loin de « a photo of a Siamese cat ».
+
+Pour comparer deux empreintes, on calcule leur **similarité cosinus** (un
+simple produit de nombres, dans `breed-ai.js` : `dot`) : 1 = identiques,
+0 = sans rapport. On fait ça avec la phrase de chaque race, puis la
+fonction **softmax** transforme les scores en pourcentages qui font 100 %.
+
+C'est du **zero-shot** (« zéro exemple ») : on n'a jamais montré de photo
+de Persan à l'IA pendant notre projet. Elle reconnaît la race grâce aux mots.
+
+### Pourquoi plus de choix peut rendre l'IA moins précise
+
+1. **Les pourcentages se partagent.** Avec 3 choix, la bonne réponse peut
+   avoir 80 %. Avec 72 races, la même certitude se dilue : un British
+   Shorthair, un Chartreux et un Bleu russe se ressemblent tous (chats gris
+   costauds), et chacun prend une part du gâteau.
+2. **Plus de pièges.** Chaque race en plus est une nouvelle occasion de se
+   tromper avec une race voisine. Les erreurs s'additionnent.
+3. **Des noms que CLIP connaît mal.** Il a vu des milliers de photos
+   légendées « Siamese », mais très peu « Khao Manee ». Ces races rares
+   brouillent le classement.
+
+C'est pour ça qu'on analyse en **deux temps** :
+
+1. d'abord la **famille** (pas un chat / gouttière poil court / gouttière poil
+   long / race à poil court / race à poil long / sans poil) : 6 choix bien
+   différents, CLIP les distingue facilement ;
+2. ensuite **seulement les races de cette famille** : un Persan n'est plus
+   jamais comparé à un Sphynx, et il y a deux fois moins de candidats.
+
+### Les astuces qui améliorent le résultat
+
+- **Plusieurs phrases par race** (« a photo of a Persian cat. » et « a photo
+  of a Persian, a type of cat. ») : on fait la moyenne de leurs empreintes.
+- **Deux vues de la photo** : coupée au centre, et entière sur un fond gris.
+  Si le chat est sur le côté, il n'est plus coupé.
+- **Un petit bonus pour « chat de gouttière »** : dans la vraie vie, la
+  plupart des chats ne sont pas de race.
+- **« Pas un chat »** : CLIP comprend mal la négation (« not a cat »), donc on
+  lui donne aussi des exemples concrets : un chien, une personne, une peluche…
+
+### Ce qu'on a découvert en testant
+
+Le modèle existe en plusieurs précisions. En **8 bits** (`q8`), le modèle
+**texte** perdait presque toute sa finesse : toutes les races obtenaient le
+même score ! En **16 bits** (`fp16`), il reconnaissait 6 races sur 6 lors du
+test. Le modèle **image**, lui, marche bien en 8 bits.
+
+Comme les phrases ne changent pas, on calcule leurs empreintes **une seule
+fois** et on les livre avec l'appli (`data/clip-text-embeddings.json`, environ
+230 Ko). Le téléphone n'a donc à télécharger que le modèle image (environ
+90 Mo), une seule fois. Si tu modifies `races.js`, l'appli s'en rend compte
+et recalcule elle-même les empreintes (en téléchargeant aussi le modèle
+texte). Pour régénérer le fichier, ouvre la console du navigateur et tape
+`copy(await AF.breedAI.exportEmbeddings())`, puis colle dans le fichier.
+
+Sur 18 photos de races de Wikipédia, la bonne race arrive en tête 11 fois, et
+dans le trio de tête 15 fois. C'est un bon niveau pour une IA gratuite qui n'a
+jamais été entraînée sur nos races, mais ça reste **indicatif**.
