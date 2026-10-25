@@ -212,6 +212,28 @@
     return { getBlob: () => blob };
   };
 
+  /* ---------- Voir une photo en grand ---------- */
+
+  AF.viewImage = function (blob, caption = '') {
+    const url = URL.createObjectURL(blob);
+    const box = document.createElement('div');
+    box.className = 'lightbox';
+    box.innerHTML = `
+      <button class="btn-icon btn-glass lightbox-close" aria-label="Fermer">${AF.icon('close')}</button>
+      <img src="${url}" alt="">
+      ${caption ? `<p>${AF.esc(caption)}</p>` : ''}`;
+    document.body.appendChild(box);
+    requestAnimationFrame(() => box.classList.add('show'));
+    const close = () => {
+      box.classList.remove('show');
+      document.removeEventListener('keydown', onKey);
+      setTimeout(() => { box.remove(); URL.revokeObjectURL(url); }, 250);
+    };
+    const onKey = (e) => { if (e.key === 'Escape') close(); };
+    box.addEventListener('click', close);
+    document.addEventListener('keydown', onKey);
+  };
+
   /* ---------- Morceaux de HTML fréquents ---------- */
 
   // Photo du chat, ou une jolie tête de chat dessinée s'il n'en a pas

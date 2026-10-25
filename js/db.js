@@ -26,11 +26,12 @@
 
   // Le numéro de version : à augmenter à chaque fois qu'on ajoute un magasin
   // ou un index. Le navigateur lance alors "onupgradeneeded" pour mettre à jour.
-  const DB_VERSION = 1;
+  const DB_VERSION = 2; // v2 : ajout du carnet de santé
 
   // Description de tous les magasins : nom -> liste des index
   const SCHEMA = {
     cats: [],
+    health: ['catId'],      // vaccins, vermifuges, antipuces, visites, allergies, traitements
     settings: []
   };
 

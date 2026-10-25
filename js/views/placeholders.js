@@ -4,7 +4,6 @@
 
 (function (AF) {
   'use strict';
-  AF.route('/sante', AF.comingSoon('Santé'), 'health');
   AF.route('/journal', AF.comingSoon('Journal'), 'journal');
   AF.route('/rappels', AF.comingSoon('Rappels'), 'reminders');
   AF.route('/profil', AF.comingSoon('Profil'), 'profile');

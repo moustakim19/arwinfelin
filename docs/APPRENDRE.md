@@ -114,3 +114,19 @@ d'écran, pour ne pas remplir la mémoire.
 Le calcul suit les repères d'International Cat Care : 1 mois ≈ 1 an humain,
 6 mois ≈ 10 ans, 1 an ≈ 15 ans, 2 ans ≈ 24 ans, puis **+4 ans par année**.
 Entre deux repères, on fait une règle de trois (une « interpolation linéaire »).
+
+---
+
+## 3. Le carnet de santé
+
+- Toutes les fiches (vaccins, vermifuges, antipuces, visites, allergies,
+  traitements) sont rangées dans **un seul magasin** `health`, avec un champ
+  `type`. L'index `catId` retrouve vite les fiches d'un chat.
+- On a passé la base en **version 2** : au prochain lancement, le navigateur
+  appelle `onupgradeneeded`, qui crée le magasin `health` sans toucher aux chats.
+- **Badge rouge « en retard »** : on compare la date du prochain rappel avec
+  aujourd'hui (`AF.daysUntil`). Si plusieurs fiches ont le même nom (le vaccin
+  Rage de 2024 puis celui de 2025), seule la plus récente compte : les
+  anciennes sont marquées « Renouvelé » (`AF.activeCare`).
+- La date de rappel est proposée automatiquement : +1 an pour un vaccin,
+  +3 mois pour un vermifuge, +1 mois pour un antipuces. On peut la changer.
