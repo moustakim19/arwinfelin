@@ -1065,3 +1065,136 @@ button.chip { border: 0; cursor: pointer; }
   border: 0;
 }
 .tabs button { padding: 8px 11px; font-size: .84rem; gap: 5px; }
+
+/* =====================================================================
+   Étape 5 — Journal et souvenirs
+   ===================================================================== */
+.filter-chips { display: flex; gap: 8px; overflow-x: auto; scrollbar-width: none; margin: 0 -18px; padding: 2px 18px; }
+.filter-chips::-webkit-scrollbar { display: none; }
+.filter-chips .chip { flex-shrink: 0; background: var(--surface); box-shadow: var(--shadow-sm); }
+.filter-chips .chip.active { background: var(--primary); color: #fff; }
+.chip.mini { padding: 2px 8px; font-size: .72rem; }
+
+.seg-small span { min-height: 38px; font-size: .85rem; }
+.seg-small .icon { width: 17px; height: 17px; }
+
+/* Frise chronologique */
+.timeline { display: flex; flex-direction: column; gap: 18px; }
+.tl-month { display: flex; flex-direction: column; gap: 12px; }
+.tl-month-title { font-size: 1.05rem; }
+.tl-item {
+  position: relative;
+  display: flex;
+  gap: 12px;
+  width: 100%;
+  padding: 0;
+  border: 0;
+  background: none;
+  text-align: left;
+}
+.tl-item::before {
+  content: '';
+  position: absolute;
+  left: 19px;
+  top: 40px;
+  bottom: -14px;
+  width: 2px;
+  background: repeating-linear-gradient(var(--surface-3) 0 6px, transparent 6px 11px);
+}
+.tl-month .tl-item:last-child::before { display: none; }
+.tl-dot {
+  display: grid;
+  place-items: center;
+  width: 40px;
+  height: 40px;
+  flex-shrink: 0;
+  border-radius: 50%;
+  background: var(--surface);
+  box-shadow: var(--shadow-sm);
+  font-size: 1.2rem;
+}
+.tl-card { flex: 1; min-width: 0; overflow: hidden; border-radius: var(--radius-lg); background: var(--surface); box-shadow: var(--shadow-sm); transition: transform .2s var(--spring); }
+.tl-item:active .tl-card { transform: scale(.98); }
+.tl-card img { width: 100%; aspect-ratio: 4 / 3; object-fit: cover; }
+.tl-body { padding: 12px 14px; display: flex; flex-direction: column; gap: 6px; }
+.tl-body p { font-size: .92rem; }
+.tl-meta { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; font-size: .85rem; }
+.tl-cat { width: 24px; height: 24px; border-radius: 50%; overflow: hidden; }
+
+/* Album */
+.album { display: grid; grid-template-columns: repeat(3, 1fr); gap: 4px; border-radius: var(--radius); overflow: hidden; }
+.album-item { position: relative; padding: 0; border: 0; aspect-ratio: 1; overflow: hidden; background: var(--surface-2); }
+.album-item img { width: 100%; height: 100%; object-fit: cover; transition: transform .4s var(--ease); }
+.album-item:active img { transform: scale(1.06); }
+.album-item span { position: absolute; right: 5px; bottom: 4px; font-size: 1rem; filter: drop-shadow(0 1px 2px rgba(0, 0, 0, .4)); }
+
+/* Souvenirs "Il y a 1 an" */
+.memory-strip { display: flex; gap: 12px; overflow-x: auto; scroll-snap-type: x mandatory; margin: 0 -18px; padding: 4px 18px 10px; scrollbar-width: none; }
+.memory-strip::-webkit-scrollbar { display: none; }
+.memory-card {
+  position: relative;
+  flex: 0 0 78%;
+  aspect-ratio: 4 / 3;
+  scroll-snap-align: center;
+  padding: 0;
+  border: 0;
+  overflow: hidden;
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow);
+  background: var(--lavender-soft);
+  text-align: left;
+}
+.memory-card img { width: 100%; height: 100%; object-fit: cover; }
+.memory-noimg { display: grid; place-items: center; height: 100%; font-size: 3rem; }
+.memory-caption {
+  position: absolute;
+  inset: auto 0 0 0;
+  display: flex;
+  flex-direction: column;
+  padding: 30px 16px 14px;
+  color: #fff;
+  background: linear-gradient(transparent, rgba(30, 15, 10, .7));
+}
+.memory-caption b { font-family: var(--font-title); font-size: 1.2rem; font-weight: 600; }
+.memory-caption span { font-size: .82rem; opacity: .9; }
+
+.memory-banner {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 14px 10px 10px;
+  border-radius: var(--radius);
+  background: linear-gradient(135deg, var(--lavender-soft), var(--surface));
+  box-shadow: var(--shadow-sm);
+}
+.memory-banner img, .memory-banner-emoji { width: 54px; height: 54px; border-radius: 15px; object-fit: cover; flex-shrink: 0; }
+.memory-banner-emoji { display: grid; place-items: center; font-size: 1.8rem; background: var(--surface); }
+.memory-banner > span { flex: 1; display: flex; flex-direction: column; }
+.memory-banner small { color: #5D4DB8; font-weight: 800; }
+
+.memory-view { display: flex; flex-direction: column; gap: 14px; }
+.memory-photo { width: 100%; max-height: 60dvh; object-fit: cover; border-radius: var(--radius-lg); }
+.memory-note { font-size: 1.02rem; white-space: pre-line; }
+
+/* Choix du chat et de l'humeur */
+.cat-pick { display: flex; gap: 8px; overflow-x: auto; scrollbar-width: none; }
+.cat-pick label { position: relative; flex-shrink: 0; }
+.cat-pick input { position: absolute; opacity: 0; }
+.cat-pick span {
+  display: flex; align-items: center; gap: 8px;
+  padding: 5px 14px 5px 5px; border-radius: 999px; background: var(--surface-2);
+  border: 2px solid transparent; cursor: pointer; font-size: .88rem;
+}
+.cat-pick .avatar { width: 32px; height: 32px; border-radius: 50%; }
+.cat-pick input:checked + span { border-color: var(--primary); background: var(--surface); }
+.mood-pick { display: grid; grid-template-columns: repeat(5, 1fr); gap: 6px; }
+.mood-pick label { position: relative; }
+.mood-pick input { position: absolute; opacity: 0; }
+.mood-pick span {
+  display: flex; flex-direction: column; align-items: center; gap: 2px;
+  padding: 10px 2px; border-radius: 16px; background: var(--surface-2);
+  border: 2px solid transparent; font-size: .72rem; font-weight: 800; color: var(--muted); cursor: pointer;
+  transition: transform .25s var(--spring);
+}
+.mood-pick b { font-size: 1.6rem; }
+.mood-pick input:checked + span { border-color: var(--lavender); background: var(--lavender-soft); color: #5D4DB8; transform: scale(1.05); }

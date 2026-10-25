@@ -26,7 +26,7 @@
 
   // Le numéro de version : à augmenter à chaque fois qu'on ajoute un magasin
   // ou un index. Le navigateur lance alors "onupgradeneeded" pour mettre à jour.
-  const DB_VERSION = 3; // v2 : carnet de santé · v3 : poids et repas
+  const DB_VERSION = 4; // v2 : santé · v3 : poids et repas · v4 : journal
 
   // Description de tous les magasins : nom -> liste des index
   const SCHEMA = {
@@ -34,6 +34,7 @@
     health: ['catId'],      // vaccins, vermifuges, antipuces, visites, allergies, traitements
     weights: ['catId'],     // pesées
     meals: ['catId'],       // historique des repas
+    journal: ['catId'],     // souvenirs (photo, humeur, note)
     settings: []
   };
 

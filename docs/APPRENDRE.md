@@ -182,3 +182,20 @@ chez le chat, une variation rapide est un signe à montrer au vétérinaire.
 
 C'est une estimation : à adapter selon les conseils du vétérinaire et
 l'emballage.
+
+---
+
+## 5. Le journal
+
+- Chaque souvenir (photo, humeur, note, date) va dans le magasin `journal`
+  (base en **version 4**).
+- **La frise** regroupe les souvenirs par mois avec une `Map` : la clé est
+  `"2026-10"`, la valeur est la liste des souvenirs de ce mois.
+- **« Il y a 1 an aujourd'hui »** : pour chaque souvenir d'une année passée, on
+  ramène sa date à l'année en cours et on regarde si elle tombe à 3 jours près
+  d'aujourd'hui (`AF.getMemories`).
+- **Délégation d'événement** : au lieu de mettre un écouteur de clic sur chaque
+  souvenir, on en met un seul sur l'écran entier, et `event.target.closest('[data-id]')`
+  retrouve le souvenir touché. Plus simple et plus léger quand il y en a des centaines.
+- `loading="lazy"` sur les images : le navigateur ne charge une photo que
+  lorsqu'elle approche de l'écran.

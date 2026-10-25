@@ -56,6 +56,19 @@
       };
     }
 
+    // Un souvenir d'il y a un an (ou plus) à la même date ?
+    const catIds = new Set(cats.map((c) => c.id));
+    const journal = (await AF.db.getAll('journal')).filter((e) => catIds.has(e.catId));
+    const memory = AF.getMemories(journal)[0];
+    const memoryCat = memory && cats.find((c) => c.id === memory.entry.catId);
+    const memoryBlock = memory ? `
+      <a class="memory-banner" href="#/journal">
+        ${memory.entry.photo ? `<img src="${AF.blobUrl(memory.entry.photo)}" alt="">` : `<span class="memory-banner-emoji">${AF.MOODS[memory.entry.mood]?.emoji || '🐾'}</span>`}
+        <span><small>✨ ${memory.years === 1 ? 'Il y a 1 an' : 'Il y a ' + memory.years + ' ans'}</small>
+        <b>Un souvenir de ${AF.esc(memoryCat.name)}</b></span>
+        ${AF.icon('chevron')}
+      </a>` : '';
+
     const html = header + `
       <div class="page">
         <section class="hero">
@@ -68,6 +81,8 @@
             ${cats.slice(0, 3).map((c) => AF.catAvatar(c, 'avatar-stack')).join('')}
           </div>
         </section>
+
+        ${memoryBlock}
 
         <div class="section-head"><h2>Mes compagnons</h2></div>
         <div class="cat-grid">
