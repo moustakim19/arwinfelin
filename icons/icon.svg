@@ -1,23 +1,55 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+  <!-- Logo ArwinFelin : un chat dessiné à la main, en dégradé, sur fond noir -->
   <defs>
-    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
-      <stop offset="0" stop-color="#F2785C"/>
-      <stop offset=".55" stop-color="#F79A6B"/>
-      <stop offset="1" stop-color="#FFC183"/>
+    <!-- Le dégradé des traits : corail, rose, violet, bleu -->
+    <linearGradient id="ink" gradientUnits="userSpaceOnUse" x1="150" y1="100" x2="380" y2="400">
+      <stop offset="0" stop-color="#FF9A62"/>
+      <stop offset="0.35" stop-color="#FF5FA2"/>
+      <stop offset="0.7" stop-color="#9D7BFF"/>
+      <stop offset="1" stop-color="#4FD1FF"/>
     </linearGradient>
+    <!-- Halo coloré très doux derrière le chat -->
+    <radialGradient id="glow" cx="0.5" cy="0.52" r="0.5">
+      <stop offset="0" stop-color="#7B4DFF" stop-opacity=".28"/>
+      <stop offset="0.6" stop-color="#FF5FA2" stop-opacity=".08"/>
+      <stop offset="1" stop-color="#000" stop-opacity="0"/>
+    </radialGradient>
+    <!-- Effet "fait main" : déforme un peu les traits, comme un dessin au crayon -->
+    <filter id="hand" x="-10%" y="-10%" width="120%" height="120%">
+      <feTurbulence type="fractalNoise" baseFrequency="0.035" numOctaves="2" seed="7"/>
+      <feDisplacementMap in="SourceGraphic" scale="7"/>
+    </filter>
   </defs>
-  <rect width="512" height="512" rx="116" fill="url(#bg)"/>
-  <circle cx="420" cy="92" r="120" fill="#fff" opacity=".13"/>
-  <g transform="translate(76 92) scale(3)">
-    <path d="M22 46 L27 13 L51 33 Q60 30 69 33 L93 13 L98 46 Q106 60 102 76 Q95 103 60 105 Q25 103 18 76 Q14 60 22 46Z" fill="#FFF8F1"/>
-    <path d="M31 23 L34 41 L45 33Z M89 23 L86 41 L75 33Z" fill="#F7B08F"/>
-    <ellipse cx="44" cy="66" rx="6.5" ry="8" fill="#3A2A25"/>
-    <ellipse cx="76" cy="66" rx="6.5" ry="8" fill="#3A2A25"/>
-    <circle cx="46.5" cy="63" r="2.3" fill="#fff"/>
-    <circle cx="78.5" cy="63" r="2.3" fill="#fff"/>
-    <path d="M55.5 78 h9 l-4.5 5z" fill="#F07B7B"/>
-    <path d="M60 83 q-3.5 6 -9 4 M60 83 q3.5 6 9 4" stroke="#3A2A25" stroke-width="2.4" fill="none" stroke-linecap="round"/>
-    <ellipse cx="35" cy="80" rx="6" ry="3.5" fill="#F07B7B" opacity=".35"/>
-    <ellipse cx="85" cy="80" rx="6" ry="3.5" fill="#F07B7B" opacity=".35"/>
+
+  <rect id="bg" width="512" height="512" rx="116" fill="#0C0A10"/>
+  <circle cx="256" cy="262" r="230" fill="url(#glow)"/>
+
+  <g id="cat" transform="translate(0 0)">
+    <g fill="none" stroke="url(#ink)" stroke-linecap="round" stroke-linejoin="round" filter="url(#hand)">
+      <!-- Tête et oreilles (deuxième passage plus fin, comme un croquis) -->
+      <path d="M156 318 C140 262 148 214 170 186 L160 100 L224 150 C246 142 268 142 290 150 L354 100 L344 186 C366 214 372 262 358 312 C344 362 304 392 256 392 C214 392 176 368 160 330" stroke-width="13"/>
+      <path d="M162 324 C146 268 152 220 174 190 L166 110 L226 156 M286 156 L346 110 L340 190 C360 220 366 266 352 314" stroke-width="5" opacity=".45"/>
+      <!-- Intérieur des oreilles -->
+      <path d="M180 130 L186 176 M332 130 L326 176" stroke-width="7" opacity=".7"/>
+      <!-- Yeux en amande -->
+      <path d="M184 262 Q213 224 242 262 Q213 296 184 262 Z" stroke-width="9"/>
+      <path d="M270 262 Q299 224 328 262 Q299 296 270 262 Z" stroke-width="9"/>
+      <!-- Nez et bouche -->
+      <path d="M244 300 Q256 296 268 300 Q262 310 256 314 Q250 310 244 300 Z" stroke-width="8"/>
+      <path d="M256 314 Q250 332 230 326 M256 314 Q262 332 282 326" stroke-width="8"/>
+      <!-- Moustaches -->
+      <path d="M196 312 Q160 302 116 300 M196 326 Q156 326 114 336 M200 340 Q166 348 130 366" stroke-width="6"/>
+      <path d="M316 312 Q352 302 396 300 M316 326 Q356 326 398 336 M312 340 Q346 348 382 366" stroke-width="6"/>
+    </g>
+    <!-- Pupilles fendues -->
+    <ellipse cx="213" cy="262" rx="7" ry="17" fill="url(#ink)"/>
+    <ellipse cx="299" cy="262" rx="7" ry="17" fill="url(#ink)"/>
+    <!-- Reflets dans les yeux -->
+    <circle cx="218" cy="252" r="4" fill="#fff"/>
+    <circle cx="304" cy="252" r="4" fill="#fff"/>
+    <!-- Petites étincelles -->
+    <path d="M404 128 l6 -20 l6 20 l20 6 l-20 6 l-6 20 l-6 -20 l-20 -6 Z" fill="#4FD1FF" opacity=".9"/>
+    <path d="M110 170 l4 -12 l4 12 l12 4 l-12 4 l-4 12 l-4 -12 l-12 -4 Z" fill="#FF9A62" opacity=".85"/>
+    <circle cx="420" cy="196" r="5" fill="#FF5FA2" opacity=".8"/>
   </g>
 </svg>

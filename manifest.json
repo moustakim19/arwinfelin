@@ -9,7 +9,7 @@
   "id": "./",
   "display": "standalone",
   "orientation": "portrait",
-  "background_color": "#FFF6EE",
+  "background_color": "#0C0A10",
   "theme_color": "#F2785C",
   "categories": ["lifestyle", "health"],
   "icons": [

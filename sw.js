@@ -10,7 +10,7 @@
    ===================================================================== */
 
 // À changer à chaque nouvelle version pour forcer la mise à jour du cache
-const VERSION = 'arwinfelin-v3';
+const VERSION = 'arwinfelin-v4';
 const APP_CACHE = VERSION + '-app';
 const CDN_CACHE = 'arwinfelin-cdn';
 
