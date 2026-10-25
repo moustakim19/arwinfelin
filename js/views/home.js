@@ -69,6 +69,23 @@
         ${AF.icon('chevron')}
       </a>` : '';
 
+    // Les rappels du jour (et ceux du carnet de santé à faire aujourd'hui ou en retard)
+    const [reminders, health] = await Promise.all([AF.db.getAll('reminders'), AF.db.getAll('health')]);
+    const now = new Date();
+    const todayList = AF.todayItems(reminders, now).filter((i) => !i.done);
+    const healthDue = AF.healthReminderItems(health, cats, 0);
+    const todayCount = todayList.length + healthDue.length;
+    const todayBlock = todayCount ? `
+      <a class="today-banner" href="#/rappels">
+        <span class="today-bell">${AF.icon('bell')}<b>${todayCount}</b></span>
+        <span class="today-list">
+          <strong>Aujourd'hui</strong>
+          <small>${AF.esc(todayList.slice(0, 3).map((i) => (i.overdue ? '⏰ ' : AF.formatTime(AF.toLocalDateTime(i.date)) + ' ') + i.reminder.title)
+            .concat(healthDue.slice(0, 2).map((h) => '💉 ' + h.entry.name)).join(' · '))}</small>
+        </span>
+        ${AF.icon('chevron')}
+      </a>` : '';
+
     const html = header + `
       <div class="page">
         <section class="hero">
@@ -82,7 +99,9 @@
           </div>
         </section>
 
+        ${todayBlock}
         ${memoryBlock}
+        ${AF.installCardHTML(true)}
 
         <div class="section-head"><h2>Mes compagnons</h2></div>
         <div class="cat-grid">
@@ -94,7 +113,7 @@
         </div>
       </div>`;
 
-    return { html };
+    return { html, mount: (root) => AF.bindInstallCard(root) };
   }
 
   AF.route('/', homeView, 'home');

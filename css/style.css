@@ -1198,3 +1198,81 @@ button.chip { border: 0; cursor: pointer; }
 }
 .mood-pick b { font-size: 1.6rem; }
 .mood-pick input:checked + span { border-color: var(--lavender); background: var(--lavender-soft); color: #5D4DB8; transform: scale(1.05); }
+
+/* =====================================================================
+   Étape 6 — Rappels, notifications, appli installable
+   ===================================================================== */
+.notif-card, .install-card {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px;
+  border-radius: var(--radius-lg);
+  background: linear-gradient(135deg, var(--apricot-soft), var(--surface));
+  box-shadow: var(--shadow-sm);
+}
+.notif-card > div, .install-card > div { flex: 1; min-width: 0; }
+.notif-card p, .install-card p { font-size: .82rem; color: var(--muted); }
+.install-card img { border-radius: 14px; box-shadow: var(--shadow-sm); }
+.notif-bell {
+  display: grid; place-items: center; width: 46px; height: 46px; flex-shrink: 0;
+  border-radius: 15px; background: var(--primary); color: #fff;
+  animation: ring 2.6s ease-in-out infinite;
+}
+@keyframes ring {
+  0%, 80%, 100% { transform: rotate(0); }
+  84% { transform: rotate(14deg); } 88% { transform: rotate(-12deg); } 92% { transform: rotate(8deg); } 96% { transform: rotate(-4deg); }
+}
+
+.rem-row { display: flex; align-items: center; gap: 12px; padding: 10px 0; border-top: 1px solid var(--line); }
+.list-card > .rem-row:first-child { border-top: 0; }
+.rem-check {
+  display: grid; place-items: center; width: 34px; height: 34px; flex-shrink: 0;
+  border-radius: 50%; border: 2.5px solid var(--surface-3); background: var(--surface);
+  color: transparent; transition: all .3s var(--spring);
+}
+.rem-check .icon { width: 18px; height: 18px; stroke-width: 3; }
+.rem-check.checked { background: var(--mint); border-color: var(--mint); color: #fff; transform: scale(1.08); }
+.rem-text { flex: 1; min-width: 0; display: flex; flex-direction: column; padding: 0; border: 0; background: none; text-align: left; }
+.rem-text strong { transition: color .2s; }
+.rem-text small { color: var(--muted); font-size: .8rem; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.rem-row.is-done .rem-text strong { text-decoration: line-through; color: var(--muted); }
+.rem-time { display: flex; flex-direction: column; align-items: center; gap: 2px; font-weight: 800; font-size: .8rem; color: var(--muted); }
+.rem-time.late { color: var(--danger); }
+.mini-dot { width: 28px; height: 28px; border-radius: 9px; }
+.mini-dot .icon { width: 15px; height: 15px; }
+
+.preset-row { display: flex; gap: 6px; overflow-x: auto; scrollbar-width: none; margin: 0 -18px; padding: 0 18px 4px; }
+.preset-row::-webkit-scrollbar { display: none; }
+.preset-row .chip { flex-shrink: 0; }
+.chip.active { background: var(--primary); color: #fff; }
+.kind-pick { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; }
+.kind-pick label { position: relative; }
+.kind-pick input { position: absolute; opacity: 0; }
+.kind-pick span {
+  display: flex; align-items: center; justify-content: center; gap: 6px; min-height: 44px;
+  border-radius: 14px; background: var(--surface-2); border: 2px solid transparent;
+  font-size: .82rem; font-weight: 800; color: var(--muted); cursor: pointer;
+}
+.kind-pick .icon { width: 18px; height: 18px; color: var(--tone); }
+.kind-pick input:checked + span { border-color: var(--tone); background: var(--tone-soft); color: var(--text); }
+
+.today-banner {
+  display: flex; align-items: center; gap: 12px; padding: 12px 14px;
+  border-radius: var(--radius); background: var(--surface); box-shadow: var(--shadow-sm);
+}
+.today-bell { position: relative; display: grid; place-items: center; width: 46px; height: 46px; flex-shrink: 0; border-radius: 15px; background: var(--apricot-soft); color: #C0661F; }
+.today-bell b { position: absolute; top: -5px; right: -5px; min-width: 20px; height: 20px; padding: 0 5px; border-radius: 10px; background: var(--danger); color: #fff; font-size: .72rem; line-height: 20px; text-align: center; }
+.today-list { flex: 1; min-width: 0; display: flex; flex-direction: column; }
+.today-list small { color: var(--muted); font-size: .82rem; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+
+.profile-card { display: flex; align-items: center; gap: 14px; padding: 18px; border-radius: var(--radius-lg); background: var(--surface); box-shadow: var(--shadow-sm); }
+.profile-card img { border-radius: 18px; }
+.steps-list { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 12px; }
+.steps-list li { display: flex; align-items: center; gap: 12px; }
+.steps-list li span { display: grid; place-items: center; width: 32px; height: 32px; flex-shrink: 0; border-radius: 50%; background: var(--primary-soft); color: var(--primary-strong); font-weight: 800; }
+.steps-list .icon { width: 18px; height: 18px; vertical-align: -3px; color: var(--sky); }
+.install-card { position: relative; }
+.install-card img { width: 46px; height: 46px; }
+.install-close { position: absolute; top: -8px; right: -6px; display: grid; place-items: center; width: 26px; height: 26px; border: 0; border-radius: 50%; background: var(--surface-3); color: var(--muted); }
+.install-close .icon { width: 14px; height: 14px; }

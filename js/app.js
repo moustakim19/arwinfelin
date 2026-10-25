@@ -128,6 +128,7 @@
 
     window.scrollTo(0, keepScroll ? scrollY : 0);
     oldUrls.forEach((url) => URL.revokeObjectURL(url));
+    if (AF.updateReminderBadge) AF.updateReminderBadge().catch(() => {});
   }
 
   /* ---------- Démarrage ---------- */
@@ -141,6 +142,9 @@
     else history.replaceState({ afIndex: 0 }, '');
 
     window.addEventListener('hashchange', () => { trackHistory(); render(); });
+
+    // Surveillance des rappels et notifications (voir notify.js)
+    if (AF.notify) AF.notify.start();
     render();
   }
 

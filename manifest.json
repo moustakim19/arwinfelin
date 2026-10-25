@@ -1,0 +1,25 @@
+{
+  "name": "ArwinFelin — le carnet de vos chats",
+  "short_name": "ArwinFelin",
+  "description": "Profils, santé, poids, souvenirs et rappels pour vos chats.",
+  "lang": "fr",
+  "dir": "ltr",
+  "start_url": "./index.html#/",
+  "scope": "./",
+  "id": "./",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#FFF6EE",
+  "theme_color": "#F2785C",
+  "categories": ["lifestyle", "health"],
+  "icons": [
+    { "src": "icons/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "icons/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
+    { "src": "icons/icon-maskable-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" },
+    { "src": "icons/icon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any" }
+  ],
+  "shortcuts": [
+    { "name": "Rappels", "url": "./index.html#/rappels", "icons": [{ "src": "icons/icon-192.png", "sizes": "192x192" }] },
+    { "name": "Nouveau souvenir", "url": "./index.html#/journal", "icons": [{ "src": "icons/icon-192.png", "sizes": "192x192" }] }
+  ]
+}

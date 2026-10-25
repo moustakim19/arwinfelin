@@ -199,3 +199,63 @@ l'emballage.
   retrouve le souvenir touché. Plus simple et plus léger quand il y en a des centaines.
 - `loading="lazy"` sur les images : le navigateur ne charge une photo que
   lorsqu'elle approche de l'écran.
+
+---
+
+## 6. Rappels, appli installable et notifications
+
+### Les rappels répétés
+
+Un rappel garde sa **première date** (`start`) et sa **répétition**. On ne
+stocke jamais la liste de toutes les dates : on la calcule (`AF.nthOccurrence`).
+Pour « chaque mois » à partir du 31 janvier, on obtient le 28 février, le
+31 mars, le 30 avril… Quand on coche « fait », on note seulement jusqu'à
+quelle occurrence c'est fait (`doneUntil`).
+
+Les rappels santé ne sont pas recopiés : l'onglet Rappels lit directement les
+dates de « prochain rappel » du carnet. Une seule source de vérité, donc jamais
+de rappel en double ou oublié.
+
+### La PWA (appli installable)
+
+- `manifest.json` : nom, couleurs et icônes de l'appli installée.
+- `sw.js`, le **service worker** : un script qui se place entre l'appli et
+  internet. À l'installation, il met tous les fichiers en cache. Ensuite :
+  - nos fichiers : **réseau d'abord**, copie du cache si on est hors ligne ;
+  - Chart.js et les polices (CDN) : **cache d'abord**, car ils ne changent jamais.
+- Le bouton « Installer » : Chrome et Edge envoient l'événement
+  `beforeinstallprompt` quand l'appli est installable. On le garde, et on
+  l'utilise quand l'utilisateur touche le bouton. Safari sur iPhone n'a pas ce
+  système : on affiche les étapes « Partager → Sur l'écran d'accueil ».
+- Quand tu modifies l'appli, change `VERSION` en haut de `sw.js` pour que le
+  cache se mette à jour chez les utilisateurs.
+
+### Les notifications : ce qui marche, honnêtement
+
+**Ce que fait l'appli :**
+1. À l'ouverture, elle vérifie les rappels du jour (bandeau sur l'accueil,
+   pastille rouge sur l'onglet Rappels, chiffre sur l'icône si elle est installée).
+2. **Tant qu'elle est ouverte** (même en arrière-plan depuis peu), elle vérifie
+   toutes les 30 secondes et envoie une notification à l'heure du rappel.
+3. Sur Android, elle demande en plus au navigateur de la réveiller de temps en
+   temps (*Periodic Background Sync*).
+
+**Les limites quand l'appli est fermée :**
+- Une PWA n'a **pas de vraie alarme programmée**. Une appli native peut dire au
+  téléphone « sonne à 8 h 00 » ; une page web ne le peut pas (l'API qui le
+  permettait, *Notification Triggers*, a été abandonnée).
+- **Android (Chrome)** : le réveil périodique marche seulement si l'appli est
+  **installée**, et c'est Chrome qui choisit le moment (souvent quelques fois
+  par jour, selon la batterie et l'usage). Donc une notification peut arriver
+  avec du retard, voire pas du tout si le téléphone économise la batterie.
+- **iPhone (Safari, iOS 16.4 et plus)** : les notifications ne marchent que si
+  l'appli est **ajoutée à l'écran d'accueil** et ouverte depuis son icône.
+  Il n'y a **aucun réveil en arrière-plan** : appli fermée, l'iPhone ne
+  préviendra **pas** à l'heure d'un rappel. Il préviendra à la prochaine ouverture.
+- **Ordinateur** : marche bien tant que le navigateur est ouvert.
+
+**La seule solution fiable appli fermée** serait les notifications *push* :
+un serveur envoie le message au bon moment (c'est ainsi que fonctionnent
+WhatsApp ou Gmail). Il faudrait un serveur, des clés et un compte, ce qu'on a
+volontairement évité. Pour un rappel vraiment important (vaccin, médicament),
+le plus sûr reste d'ajouter aussi une alarme dans l'agenda du téléphone.
